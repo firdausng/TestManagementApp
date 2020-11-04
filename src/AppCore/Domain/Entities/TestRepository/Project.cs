@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace AppCore.Domain.Entities.TestRepository
 {
@@ -18,5 +19,10 @@ namespace AppCore.Domain.Entities.TestRepository
         public List<Feature> Features { get; } = new List<Feature>();
         public List<Tag> Tags { get; } = new List<Tag>();
         //public List<ProjectUser> Members { get; set; } = new List<ProjectUser>();
+
+        public void AddFeature(Feature feature)
+        {
+            Features.Add(feature);
+        }
     }
 }

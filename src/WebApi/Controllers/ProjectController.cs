@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/project")]
     public class ProjectController : ControllerBase
     {
         private readonly IMediator mediator;

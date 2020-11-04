@@ -57,6 +57,10 @@ namespace WebApi.Middlewares
 
             switch (exception)
             {
+                case EntityCreateFailureException _:
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    problemDetail.Status = StatusCodes.Status400BadRequest;
+                    break;
                 case EntityNotFoundException _:
                     context.Response.StatusCode = StatusCodes.Status404NotFound;
                     problemDetail.Status = StatusCodes.Status404NotFound;
