@@ -1,9 +1,7 @@
 ﻿using AppCore.Services.TestRepository.Commands;
-using AppCore.Services.TestRepository.Queries;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,36 +28,22 @@ namespace IntegrationTest.TestRepository
         }
     }
 
-    public class GetProject: IntegrationTestBase
+    public class DeleteProjectTest : IntegrationTestBase
     {
         [Fact]
-        public async Task ShouldGetProjectList()
+        public async Task ShouldDeleteProject()
         {
             var createProjectCommand = new CreateProjectCommand("project1", true);
             var createProjectDto = await SendAsync(createProjectCommand);
 
-            var getProjectListQuery = new GetProjectListQuery();
-            var getProjectListDto = await SendAsync(getProjectListQuery);
+            var deleteProjectCommand = new DeleteProjectCommand(createProjectDto.Id);
+            await SendAsync(deleteProjectCommand);
 
-            getProjectListDto.ShouldNotBeNull();
-            getProjectListDto.Count.ShouldBe(1);
-            getProjectListDto.Data.ShouldNotBeNull();
-            getProjectListDto.Data.ShouldBeOfType<List<GetProjectDto>>();
-        }
+            var projectEntity = await ExecuteDbContextAsync(db => db.Projects
+                .SingleOrDefaultAsync(p => p.Id.Equals(createProjectDto.Id))
+            );
 
-        [Fact]
-        public async Task ShouldGetProjectItem()
-        {
-            var createProjectCommand = new CreateProjectCommand("project1", true);
-            var createProjectDto = await SendAsync(createProjectCommand);
-
-            var getProjectListQuery = new GetProjectQuery(createProjectDto.Id);
-            var getProjectListDto = await SendAsync(getProjectListQuery);
-
-            getProjectListDto.ShouldNotBeNull();
-            getProjectListDto.Id.ShouldBe(createProjectDto.Id);
-            getProjectListDto.IsEnabled.ShouldBe(true);
-            getProjectListDto.Name.ShouldBe("project1");
+            projectEntity.ShouldBeNull();
         }
     }
 }
