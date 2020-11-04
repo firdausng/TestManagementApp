@@ -12,7 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApi.Middlewares;
 
+[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace WebApi
 {
     public class Startup
@@ -43,10 +45,12 @@ namespace WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1"));
+                
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1"));
 
+            app.UseCustomExceptionHandler();
             app.UseRouting();
 
             app.UseAuthorization();
