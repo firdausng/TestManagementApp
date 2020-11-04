@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AppCore.Interfaces
+namespace AppCore.Common.Interfaces
 {
     public interface IAppDbContext
     {

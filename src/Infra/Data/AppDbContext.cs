@@ -1,5 +1,5 @@
 ﻿using AppCore.Domain.Entities.TestRepository;
-using AppCore.Interfaces;
+using AppCore.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

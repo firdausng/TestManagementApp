@@ -1,5 +1,5 @@
 ﻿using AppCore.Domain.Entities.TestRepository;
-using AppCore.Interfaces;
+using AppCore.Common.Interfaces;
 using AppCore.Services.Common.Models;
 using FluentValidation;
 using MediatR;

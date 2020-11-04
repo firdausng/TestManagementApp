@@ -1,4 +1,4 @@
-﻿using AppCore.Interfaces;
+﻿using AppCore.Common.Interfaces;
 using Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
