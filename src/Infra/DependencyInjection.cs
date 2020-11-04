@@ -1,0 +1,34 @@
+﻿using AppCore.Interfaces;
+using Infra.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Infra
+{
+    public static class DependencyInjection
+    {
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        {
+            var migrationsAssembly = typeof(DependencyInjection).Assembly.GetName().Name;
+            services.AddDbContext<AppDbContext>(cfg =>
+            {
+                cfg.UseNpgsql(configuration.GetConnectionString("PostgresConnectionString"),
+                    options =>
+                    {
+                        options.EnableRetryOnFailure(3);
+                        options.MigrationsAssembly(migrationsAssembly);
+                    });
+            });
+
+            services.AddScoped<IAppDbContext, AppDbContext>();
+
+            return services;
+        }
+    }
+}
