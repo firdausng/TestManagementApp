@@ -21,7 +21,6 @@ namespace IntegrationTest.TestRepository
             var getProjectListDto = await SendAsync(getProjectListQuery);
 
             getProjectListDto.ShouldNotBeNull();
-            getProjectListDto.Count.ShouldBe(1);
             getProjectListDto.Data.ShouldNotBeNull();
             getProjectListDto.Data.ShouldBeOfType<List<GetProjectDto>>();
         }

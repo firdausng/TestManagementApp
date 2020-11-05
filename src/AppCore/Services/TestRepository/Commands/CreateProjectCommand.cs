@@ -3,7 +3,6 @@ using AppCore.Common.Interfaces;
 using AppCore.Services.Common.Models;
 using FluentValidation;
 using MediatR;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -32,7 +31,7 @@ namespace AppCore.Services.TestRepository.Commands
             }
             public async Task<CreatedItemDto> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
             {
-                var entity = new Project(request.Name, request.IsEnabled);
+                var entity = Project.Factory(request.Name, request.IsEnabled);
 
                 db.Projects.Add(entity);
                 await db.SaveChangesAsync(cancellationToken);

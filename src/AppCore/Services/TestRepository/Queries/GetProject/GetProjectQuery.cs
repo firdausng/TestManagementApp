@@ -30,7 +30,7 @@ namespace AppCore.Services.TestRepository.Queries
                     .AsNoTracking()
                     .FirstOrDefaultAsync(p => p.Id.Equals(request.Id), cancellationToken);
 
-                if (entitiy == null)
+                if (!entitiy.IsEntityExist())
                 {
                     throw new EntityNotFoundException(nameof(Project), request.Id);
                 }

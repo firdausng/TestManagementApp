@@ -57,7 +57,6 @@ namespace WebApi.Controllers
         {
             await mediator.Send(new DeleteProjectCommand(id));
             return NoContent();
-
         }
     }
 }
