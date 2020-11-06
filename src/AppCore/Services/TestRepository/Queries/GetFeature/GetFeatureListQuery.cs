@@ -14,7 +14,7 @@ namespace AppCore.Services.TestRepository.Queries.GetFeature
 {
     public class GetFeatureListQuery : IRequest<GetObjectListDto<GetFeatureDto>>
     {
-        public Guid ProjectId { get; set; }
+        public Guid ProjectId { get; private set; }
         
         public GetFeatureListQuery(Guid ProjectId)
         {

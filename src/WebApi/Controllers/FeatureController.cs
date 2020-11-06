@@ -1,4 +1,6 @@
-﻿using AppCore.Services.TestRepository.Commands;
+﻿using AppCore.Services.Common.Models;
+using AppCore.Services.TestRepository.Commands;
+using AppCore.Services.TestRepository.Queries.GetFeature;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,22 +23,17 @@ namespace WebApi.Controllers
         }
 
         [HttpGet(Name = nameof(GetProjectFeatures))]
-        //public async Task<ActionResult<GetObjectListVm<GetProjectFeatureListDto>>> GetProjectFeatures(Guid projectId)
-        public async Task<IActionResult> GetProjectFeatures(Guid projectId)
+        public async Task<ActionResult<GetObjectListDto<GetFeatureDto>>> GetProjectFeatures(Guid projectId)
         {
-            //var vm = await mediator.Send(new GetProjectFeatureListQuery() { ProjectId = projectId });
-            //return Ok(vm);
-            return Ok();
+            var vm = await mediator.Send(new GetFeatureListQuery(projectId));
+            return Ok(vm);
         }
 
         [HttpGet("{featureId}", Name = nameof(GetProjectFeature))]
-        //public async Task<ActionResult<GetProjectFeatureListDto>> GetProjectFeature(Guid featureId, Guid projectId)
-        public async Task<IActionResult> GetProjectFeature(Guid featureId, Guid projectId)
+        public async Task<ActionResult<GetFeatureDto>> GetProjectFeature(Guid featureId, Guid projectId)
         {
-            //var vm = await mediator.Send(new GetProjectFeatureItemQuery() { Id = featureId, ProjectId = projectId });
-
-            //return Ok(vm);
-            return Ok();
+            var vm = await mediator.Send(new GetFeatureQuery(featureId, projectId));
+            return Ok(vm);
         }
 
         [HttpPost(Name = nameof(NewFeature))]

@@ -13,8 +13,8 @@ namespace AppCore.Services.TestRepository.Queries.GetFeature
 {
     public class GetFeatureQuery : IRequest<GetFeatureDto>
     {
-        public Guid Id { get; set; }
-        public Guid ProjectId { get; set; }
+        public Guid Id { get; private set; }
+        public Guid ProjectId { get; private set; }
         public GetFeatureQuery(Guid Id, Guid ProjectId)
         {
             this.Id = Id;
