@@ -69,12 +69,6 @@ namespace AppCore.Services.TestRepository.Commands
                     .NotEmpty()
                     .WithMessage("Project name is required.")
                     .WithMessage("Project name already exists.");
-
-                //RuleFor(v => v.IsEnabled)
-                //    .Must(v => v == false || v == true)
-                //    .WithName("IsEnabled")
-                //    .NotNull()
-                //    .WithName("IsEnabled");
             }
         }
     }

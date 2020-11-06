@@ -79,10 +79,9 @@ namespace AppCore.Services.TestRepository.Commands
                 RuleFor(v => v.Name)
                     .MaximumLength(50)
                     .NotEmpty()
-                    .WithMessage("Project name is required.")
-                    .WithMessage("Project name already exists.");
+                    .WithMessage("name is required.");
 
-                RuleFor(v => v.Name)
+                RuleFor(v => v.Description)
                     .MaximumLength(150);
             }
         }

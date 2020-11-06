@@ -36,11 +36,6 @@ namespace AppCore.Services.TestRepository.Queries.GetFeature
                     .Where(f => f.Project.Id.Equals(request.ProjectId))
                     .ToListAsync(cancellationToken);
 
-                if (entitiesList.Count == 0)
-                {
-                    throw new EntityNotFoundException(nameof(Project), request.ProjectId);
-                }
-
                 var list = entitiesList
                     .Select(x => new GetFeatureDto
                     {

@@ -74,5 +74,24 @@ namespace UnitTest.Entity
             feature.Description.ShouldBe("update description");
             feature.Name.ShouldBe("update");
         }
+
+        [Fact]
+        public void Should_Create_Scenario_Entity()
+        {
+            var project = Project.Factory("project1", true);
+            var scenario = Scenario.Factory("test", project, Feature.Factory("feature", project));
+            scenario.ShouldBeOfType<Scenario>();
+            scenario.Feature.ShouldNotBeNull();
+            scenario.Feature.Name.ShouldBe("feature"); 
+        }
+
+        [Fact]
+        public void Should_Create_Scenario_Entity_When_feature_null()
+        {
+            var project = Project.Factory("project1", true);
+            var scenario = Scenario.Factory("test", project, null);
+            scenario.ShouldBeOfType<Scenario>();
+            scenario.Feature.ShouldBeNull();
+        }
     }
 }
