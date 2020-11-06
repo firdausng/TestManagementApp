@@ -106,12 +106,17 @@ namespace Infra.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Status")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FeatureId");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Scenarios");
                 });
@@ -160,7 +165,7 @@ namespace Infra.Migrations
             modelBuilder.Entity("AppCore.Domain.Entities.TestRepository.Feature", b =>
                 {
                     b.HasOne("AppCore.Domain.Entities.TestRepository.Project", "Project")
-                        .WithMany("Features")
+                        .WithMany("FeatureList")
                         .HasForeignKey("ProjectId");
 
                     b.Navigation("Project");
@@ -168,9 +173,13 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("AppCore.Domain.Entities.TestRepository.Scenario", b =>
                 {
-                    b.HasOne("AppCore.Domain.Entities.TestRepository.Feature", null)
+                    b.HasOne("AppCore.Domain.Entities.TestRepository.Feature", "Feature")
                         .WithMany("Scenarios")
                         .HasForeignKey("FeatureId");
+
+                    b.HasOne("AppCore.Domain.Entities.TestRepository.Project", "Project")
+                        .WithMany("ScenarioList")
+                        .HasForeignKey("ProjectId");
 
                     b.OwnsMany("AppCore.Domain.Entities.TestRepository.Step", "StepsList", b1 =>
                         {
@@ -211,6 +220,10 @@ namespace Infra.Migrations
                             b1.Navigation("Scenario");
                         });
 
+                    b.Navigation("Feature");
+
+                    b.Navigation("Project");
+
                     b.Navigation("StepsList");
                 });
 
@@ -240,7 +253,9 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("AppCore.Domain.Entities.TestRepository.Project", b =>
                 {
-                    b.Navigation("Features");
+                    b.Navigation("FeatureList");
+
+                    b.Navigation("ScenarioList");
 
                     b.Navigation("Tags");
                 });

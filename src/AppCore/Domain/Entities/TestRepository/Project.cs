@@ -7,7 +7,8 @@ namespace AppCore.Domain.Entities.TestRepository
     {
         public string Name { get; private set; }
         public bool IsEnabled { get; private set; }
-        public List<Feature> Features { get; } = new List<Feature>();
+        public List<Feature> FeatureList { get; } = new List<Feature>();
+        public List<Scenario> ScenarioList { get; } = new List<Scenario>();
         public List<Tag> Tags { get; } = new List<Tag>();
         //public List<ProjectUser> Members { get; set; } = new List<ProjectUser>();
 
@@ -33,7 +34,12 @@ namespace AppCore.Domain.Entities.TestRepository
 
         public void AddFeature(Feature feature)
         {
-            Features.Add(feature);
+            FeatureList.Add(feature);
+        }
+
+        public void AddScenario(Scenario scenario)
+        {
+            ScenarioList.Add(scenario);
         }
 
         public void Update(string Name, bool IsEnabled)

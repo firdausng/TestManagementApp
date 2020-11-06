@@ -54,9 +54,10 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: true),
+                    FeatureId = table.Column<Guid>(type: "uuid", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<string>(type: "text", nullable: true),
-                    FeatureId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true),
@@ -69,6 +70,12 @@ namespace Infra.Migrations
                         name: "FK_Scenarios_Features_FeatureId",
                         column: x => x.FeatureId,
                         principalTable: "Features",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Scenarios_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -148,6 +155,11 @@ namespace Infra.Migrations
                 name: "IX_Scenarios_FeatureId",
                 table: "Scenarios",
                 column: "FeatureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Scenarios_ProjectId",
+                table: "Scenarios",
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Step_ScenarioId",
