@@ -21,8 +21,12 @@ namespace IntegrationTest.TestRepository
             var getProjectListDto = await SendAsync(getProjectListQuery);
 
             getProjectListDto.ShouldNotBeNull();
+            getProjectListDto.Count.ShouldNotBe(0);
             getProjectListDto.Data.ShouldNotBeNull();
             getProjectListDto.Data.ShouldBeOfType<List<GetProjectDto>>();
+
+            var deleteProjectCommand = new DeleteProjectCommand(createProjectDto.Id);
+            await SendAsync(deleteProjectCommand);
         }
 
         [Fact]
@@ -38,6 +42,9 @@ namespace IntegrationTest.TestRepository
             getProjectListDto.Id.ShouldBe(createProjectDto.Id);
             getProjectListDto.IsEnabled.ShouldBe(true);
             getProjectListDto.Name.ShouldBe("project1");
+
+            var deleteProjectCommand = new DeleteProjectCommand(createProjectDto.Id);
+            await SendAsync(deleteProjectCommand);
         }
     }
 }

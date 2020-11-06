@@ -7,7 +7,6 @@ using Xunit;
 namespace IntegrationTest.TestRepository
 {
     using static SliceFixture;
-
     public class UpdateProjectTest : IntegrationTestBase
     {
         [Fact]
