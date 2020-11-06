@@ -51,5 +51,12 @@ namespace WebApi.Controllers
             }
 
         }
+
+        [HttpDelete("{id}", Name = nameof(DeleteFeature))]
+        public async Task<ActionResult> DeleteFeature(Guid id, Guid projectId)
+        {
+            await mediator.Send(new DeleteFeatureCommand(id, projectId));
+            return NoContent();
+        }
     }
 }
