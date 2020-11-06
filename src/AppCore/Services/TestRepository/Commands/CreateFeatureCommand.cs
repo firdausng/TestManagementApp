@@ -37,7 +37,6 @@ namespace AppCore.Services.TestRepository.Commands
             public async Task<CreatedItemDto> Handle(CreateFeatureCommand request, CancellationToken cancellationToken)
             {
                 var projectEntity = await db.Projects
-                    .AsNoTracking()
                     .FirstOrDefaultAsync(p => p.Id.Equals(request.ProjectId), cancellationToken);
 
                 if (!projectEntity.IsEntityExist())

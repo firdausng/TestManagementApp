@@ -63,5 +63,16 @@ namespace UnitTest.Entity
             feature.Description.ShouldBe("description");
         }
 
+        [Fact]
+        public void Should_Update_Feature_Entity_With_Description()
+        {
+            var feature = Feature.Factory("test", Project.Factory("project1", true), "description");
+
+            feature.UpdateInfo("update", "update description");
+
+            feature.ShouldBeOfType<Feature>();
+            feature.Description.ShouldBe("update description");
+            feature.Name.ShouldBe("update");
+        }
     }
 }

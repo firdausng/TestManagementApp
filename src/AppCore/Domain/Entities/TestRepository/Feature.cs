@@ -26,15 +26,34 @@ namespace AppCore.Domain.Entities.TestRepository
         private Feature()
         {}
 
-        private Feature(string Name, Project Project)
+        private Feature(string Name, Project Project, string Description = null)
         {
             this.Name = Name;
             this.Project = Project;
+
+            if (!string.IsNullOrEmpty(Description))
+            {
+                this.Description = Description;
+            }
         }
 
         public void AddDescription(string Description)
         {
             this.Description = Description;
+        }
+
+        public void UpdateInfo(string Name, string Description = null)
+        {
+            if (string.IsNullOrEmpty(Name))
+            {
+                throw new System.ArgumentException($"'{nameof(Name)}' cannot be null or empty", nameof(Name));
+            }
+            this.Name = Name;
+
+            if (!string.IsNullOrEmpty(Description))
+            {
+                this.Description = Description;
+            }
         }
     }
 }
