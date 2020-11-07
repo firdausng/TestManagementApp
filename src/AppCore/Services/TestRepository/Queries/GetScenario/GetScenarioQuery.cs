@@ -1,5 +1,6 @@
 ﻿using AppCore.Common.Exceptions;
 using AppCore.Common.Interfaces;
+using AppCore.Domain.Entities.Common.Guards;
 using AppCore.Domain.Entities.TestRepository;
 using FluentValidation;
 using MediatR;
@@ -51,10 +52,7 @@ namespace AppCore.Services.TestRepository.Queries.GetScenario
 
                 var entity = await entityQuery.FirstOrDefaultAsync(p => p.Id.Equals(request.Id), cancellationToken);
 
-                if (!entity.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Scenario), request.Id);
-                }
+                EntityGuard.NullGuard(entity, new EntityNotFoundException(nameof(Scenario), request.Id));
 
                 var dto = new GetScenarioDto
                 {

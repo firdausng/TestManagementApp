@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System;
 using AppCore.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using AppCore.Domain.Entities.Common.Guards;
 
 namespace AppCore.Services.TestRepository.Commands
 {
@@ -89,10 +90,7 @@ namespace AppCore.Services.TestRepository.Commands
                 var projectEntity = await db.Projects
                     .FirstOrDefaultAsync(p => p.Id.Equals(request.ProjectId), cancellationToken);
 
-                if (!projectEntity.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Project), request.ProjectId);
-                }
+                EntityGuard.NullGuard(projectEntity, new EntityNotFoundException(nameof(Project), request.ProjectId));
 
                 Feature featureEntity = null;
                 if (request.FeatureId != Guid.Empty)
@@ -100,18 +98,12 @@ namespace AppCore.Services.TestRepository.Commands
                     featureEntity = await db.Features
                         .FirstOrDefaultAsync(p => p.Id.Equals(request.FeatureId), cancellationToken);
 
-                    if (!featureEntity.IsEntityExist())
-                    {
-                        throw new EntityNotFoundException(nameof(Feature), request.FeatureId);
-                    }
+                    EntityGuard.NullGuard(featureEntity, new EntityNotFoundException(nameof(Feature), request.FeatureId));
                 }
 
                 var entity = Scenario.Factory(request.Name, projectEntity, featureEntity);
 
-                if (!entity.IsEntityExist())
-                {
-                    throw new EntityCreateFailureException(nameof(Scenario), request, "Entity Creation failed");
-                }
+                EntityGuard.NullGuard(entity, new EntityCreateFailureException(nameof(Scenario), request, "Entity Creation failed"));
 
                 projectEntity.AddScenario(entity);
 

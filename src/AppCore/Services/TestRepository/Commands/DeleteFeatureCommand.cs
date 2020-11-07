@@ -1,5 +1,6 @@
 ﻿using AppCore.Common.Exceptions;
 using AppCore.Common.Interfaces;
+using AppCore.Domain.Entities.Common.Guards;
 using AppCore.Domain.Entities.TestRepository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -35,10 +36,7 @@ namespace AppCore.Services.TestRepository.Commands
                     .Where(t => t.Id == request.Id)
                     .SingleOrDefaultAsync();
 
-                if (!featureEntity.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Project), request.Id);
-                }
+                EntityGuard.NullGuard(featureEntity, new EntityNotFoundException(nameof(Project), request.Id));
 
                 context.Features.Remove(featureEntity);
                 await context.SaveChangesAsync(cancellationToken);

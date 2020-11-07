@@ -1,5 +1,6 @@
 ﻿using AppCore.Common.Exceptions;
 using AppCore.Common.Interfaces;
+using AppCore.Domain.Entities.Common.Guards;
 using AppCore.Domain.Entities.TestRepository;
 using AppCore.Services.Common.Models;
 using FluentValidation;
@@ -39,17 +40,11 @@ namespace AppCore.Services.TestRepository.Commands
                 var projectEntity = await db.Projects
                     .FirstOrDefaultAsync(p => p.Id.Equals(request.ProjectId), cancellationToken);
 
-                if (!projectEntity.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Project), request.ProjectId);
-                }
+                EntityGuard.NullGuard(projectEntity, new EntityNotFoundException(nameof(Project), request.ProjectId));
 
                 var entity = Feature.Factory(request.Name, projectEntity);
 
-                if (!entity.IsEntityExist())
-                {
-                    throw new EntityCreateFailureException(nameof(Feature), request.ProjectId, "Entity Creation failed");
-                }
+                EntityGuard.NullGuard(entity, new EntityCreateFailureException(nameof(Feature), request.ProjectId, "Entity Creation failed"));
 
                 projectEntity.AddFeature(entity);
 

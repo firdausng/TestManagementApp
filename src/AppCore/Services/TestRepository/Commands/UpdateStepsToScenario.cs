@@ -9,6 +9,7 @@ using AppCore.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
+using AppCore.Domain.Entities.Common.Guards;
 
 namespace AppCore.Services.TestRepository.Commands
 {
@@ -41,10 +42,7 @@ namespace AppCore.Services.TestRepository.Commands
 
                 var scenarioEntity = await entityQuery.FirstOrDefaultAsync(p => p.Id.Equals(request.ScenarioId), cancellationToken);
 
-                if (!scenarioEntity.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Scenario), request.ScenarioId);
-                }
+                EntityGuard.NullGuard(scenarioEntity, new EntityNotFoundException(nameof(Scenario), request.ScenarioId));
 
                 var stepList = request.Steps.Select(s => new Step(s.Order, s.Description, scenarioEntity)).ToList();
 

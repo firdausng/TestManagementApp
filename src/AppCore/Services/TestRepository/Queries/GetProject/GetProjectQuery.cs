@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AppCore.Common.Exceptions;
 using FluentValidation;
+using AppCore.Domain.Entities.Common.Guards;
 
 namespace AppCore.Services.TestRepository.Queries
 {
@@ -30,10 +31,7 @@ namespace AppCore.Services.TestRepository.Queries
                     .AsNoTracking()
                     .FirstOrDefaultAsync(p => p.Id.Equals(request.Id), cancellationToken);
 
-                if (!entitiy.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Project), request.Id);
-                }
+                EntityGuard.NullGuard(entitiy, new EntityNotFoundException(nameof(Project), request.Id));
 
                 var dto = new GetProjectDto
                 {

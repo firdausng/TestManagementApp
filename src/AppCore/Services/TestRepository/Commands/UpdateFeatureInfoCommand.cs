@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AppCore.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using AppCore.Domain.Entities.Common.Guards;
 
 namespace AppCore.Services.TestRepository.Commands
 {
@@ -41,19 +42,13 @@ namespace AppCore.Services.TestRepository.Commands
 
                 var projectEntity = await entityQuery.FirstOrDefaultAsync(p => p.Id.Equals(request.ProjectId), cancellationToken);
 
-                if (!projectEntity.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Project), request.ProjectId);
-                }
+                EntityGuard.NullGuard(projectEntity, new EntityNotFoundException(nameof(Project), request.ProjectId));
 
                 var featureEntity = await db.Features
                     .Where(t => t.Id == request.Id)
                     .SingleOrDefaultAsync();
 
-                if (!featureEntity.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Feature), request.Id);
-                }
+                EntityGuard.NullGuard(featureEntity, new EntityNotFoundException(nameof(Feature), request.Id));
 
                 featureEntity.UpdateInfo(request.Name, request.Description);
 

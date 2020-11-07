@@ -1,5 +1,6 @@
 ﻿using AppCore.Common.Exceptions;
 using AppCore.Common.Interfaces;
+using AppCore.Domain.Entities.Common.Guards;
 using AppCore.Domain.Entities.TestRepository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -36,10 +37,7 @@ namespace AppCore.Services.TestRepository.Commands
                     .Where(t => t.Id.Equals(request.Id))
                     .SingleOrDefaultAsync();
 
-                if (!scenarioEntity.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Scenario), request.Id);
-                }
+                EntityGuard.NullGuard(scenarioEntity, new EntityNotFoundException(nameof(Scenario), request.Id));
 
                 context.Scenarios.Remove(scenarioEntity);
                 await context.SaveChangesAsync(cancellationToken);

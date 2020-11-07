@@ -1,5 +1,6 @@
 ﻿using AppCore.Common.Exceptions;
 using AppCore.Common.Interfaces;
+using AppCore.Domain.Entities.Common.Guards;
 using AppCore.Domain.Entities.TestRepository;
 using FluentValidation;
 using MediatR;
@@ -36,10 +37,7 @@ namespace AppCore.Services.TestRepository.Queries.GetFeature
                     .Where(f => f.Id.Equals(request.Id))
                     .SingleOrDefaultAsync(cancellationToken);
 
-                if (!entity.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Feature), request.ProjectId);
-                }
+                EntityGuard.NullGuard(entity, new EntityNotFoundException(nameof(Feature), request.ProjectId));
 
                 var dto = new GetFeatureDto
                 {

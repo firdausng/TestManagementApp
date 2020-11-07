@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AppCore.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using AppCore.Domain.Entities.Common.Guards;
 
 namespace AppCore.Services.TestRepository.Commands
 {
@@ -38,10 +39,7 @@ namespace AppCore.Services.TestRepository.Commands
 
                 var entity = await entityQuery.FirstOrDefaultAsync(p => p.Id.Equals(request.Id), cancellationToken);
 
-                if (!entity.IsEntityExist())
-                {
-                    throw new EntityNotFoundException(nameof(Project), request.Id);
-                }
+                EntityGuard.NullGuard(entity, new EntityNotFoundException(nameof(Project), request.Id));
 
                 entity.Update(request.Name, request.IsEnabled);
 
