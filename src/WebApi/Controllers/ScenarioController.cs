@@ -23,16 +23,16 @@ namespace WebApi.Controllers
         }
 
         [HttpGet(Name = nameof(GetScenarios))]
-        public async Task<ActionResult<GetObjectListDto<GetScenarioDto>>> GetScenarios(Guid projectId, bool withFeature)
+        public async Task<ActionResult<GetObjectListDto<GetScenarioDto>>> GetScenarios(Guid projectId, bool includeSteps, bool includeFeature)
         {
-            var vm = await mediator.Send(new GetScenarioListQuery(projectId, withFeature));
+            var vm = await mediator.Send(new GetScenarioListQuery(projectId, includeSteps, includeFeature));
             return Ok(vm);
         }
 
         [HttpGet("{scenarioId}", Name = nameof(GetScenario))]
-        public async Task<ActionResult<GetScenarioDto>> GetScenario(Guid scenarioId, Guid projectId, bool withFeature)
+        public async Task<ActionResult<GetScenarioDto>> GetScenario(Guid scenarioId, Guid projectId, bool includeSteps, bool includeFeature)
         {
-            var vm = await mediator.Send(new GetScenarioQuery(scenarioId, projectId, withFeature));
+            var vm = await mediator.Send(new GetScenarioQuery(scenarioId, projectId, includeSteps, includeFeature));
             return Ok(vm);
         }
 
@@ -56,6 +56,13 @@ namespace WebApi.Controllers
         public async Task<ActionResult> DeleteScenario(Guid id, Guid projectId)
         {
             await mediator.Send(new DeleteScenarioCommand(id, projectId));
+            return NoContent();
+        }
+
+        [HttpPost("AddSteps", Name = nameof(UpdateStepsToScenario))]
+        public async Task<ActionResult<Guid>> UpdateStepsToScenario(UpdateStepsToScenarioCommand updateStepsToScenario)
+        {
+            await mediator.Send(updateStepsToScenario);
             return NoContent();
         }
     }

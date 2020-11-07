@@ -15,12 +15,14 @@ namespace AppCore.Services.TestRepository.Queries.GetScenario
     {
         public Guid Id { get; private set; }
         public Guid ProjectId { get; private set; }
-        public bool WithFeature { get; private set; }
-        public GetScenarioQuery(Guid id, Guid projectId, bool withFeature = false)
+        public bool IncludeSteps { get; }
+        public bool IncludeFeature { get; private set; }
+        public GetScenarioQuery(Guid id, Guid projectId, bool includeSteps, bool includeFeature = false)
         {
             Id = id;
             ProjectId = projectId;
-            WithFeature = withFeature;
+            IncludeSteps = includeSteps;
+            IncludeFeature = includeFeature;
         }
         public class QueryHandler : IRequestHandler<GetScenarioQuery, GetScenarioDto>
         {
@@ -35,11 +37,18 @@ namespace AppCore.Services.TestRepository.Queries.GetScenario
                     .Include(s => s.Project)
                     .Where(s => s.Project.Id == request.ProjectId);
 
-                if (request.WithFeature)
+                if (request.IncludeFeature)
                 {
                     entityQuery
                     .Include(s => s.Feature);
                 }
+
+                if (request.IncludeSteps)
+                {
+                    entityQuery
+                    .Include(s => s.StepsList);
+                }
+
                 var entity = await entityQuery.FirstOrDefaultAsync(p => p.Id.Equals(request.Id), cancellationToken);
 
                 if (!entity.IsEntityExist())
@@ -54,9 +63,14 @@ namespace AppCore.Services.TestRepository.Queries.GetScenario
                     Description = entity.Description,
                 };
 
-                if (request.WithFeature)
+                if (request.IncludeFeature)
                 {
                     dto.FeatureId = entity.Feature.Id;
+                }
+
+                if (request.IncludeSteps)
+                {
+                    dto.StepList = entity.StepsList.Select(s => new GetScenarioDto.Step(s.Order, s.Description)).ToList();
                 }
 
                 return dto;

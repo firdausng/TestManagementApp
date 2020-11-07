@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace AppCore.Domain.Entities.TestRepository
 {
@@ -30,7 +31,7 @@ namespace AppCore.Domain.Entities.TestRepository
         public Project Project { get; set; }
         public Feature Feature { get; set; }
         public string Description { get; private set; }
-        public List<Step> StepsList { get; set; } = new List<Step>();
+        public List<Step> StepsList { get; private set; } = new List<Step>();
 
         public void UpdateInfo(string description)
         {
@@ -39,6 +40,15 @@ namespace AppCore.Domain.Entities.TestRepository
                 throw new System.ArgumentException($"'{nameof(description)}' cannot be null or empty", nameof(description));
             }
             this.Description = description;
+        }
+
+        /// <summary>
+        /// replace current list with new list
+        /// </summary>
+        /// <param name="steps">list of steps</param>
+        public void AddSteps(List<Step> steps)
+        {
+            StepsList = steps;
         }
     }
 }
