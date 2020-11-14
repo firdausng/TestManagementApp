@@ -18,7 +18,8 @@ namespace Infra
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             var migrationsAssembly = typeof(DependencyInjection).Assembly.GetName().Name;
-            services.AddDbContext<AppDbContext>(cfg =>
+
+            services.AddDbContext<AppDbContext>((sp, cfg) =>
             {
                 cfg.LogTo(Console.WriteLine,
                     new[]
@@ -28,7 +29,8 @@ namespace Infra
                     LogLevel.Information,
                     DbContextLoggerOptions.SingleLine | DbContextLoggerOptions.UtcTime);
 
-                cfg.UseNpgsql(configuration.GetConnectionString("PostgresConnectionString"),
+                cfg
+                    .UseNpgsql(configuration.GetConnectionString("PostgresConnectionString"),
                     options =>
                     {
                         options.EnableRetryOnFailure(3);
