@@ -40,7 +40,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult<Guid>> NewScenario(CreateScenarioCommand createScenarioCommand)
         {
             var vm = await mediator.Send(createScenarioCommand);
-            if (vm.Id != null)
+            if (vm.Id != Guid.Empty)
             {
                 var link = Url.Link(nameof(GetScenario), new { scenarioId = vm.Id, projectId= createScenarioCommand.ProjectId });
                 return Created(link, vm);

@@ -9,7 +9,6 @@ namespace AppCore.Domain.Entities.TestRepository
         public string Description { get; private set; }
         public Project Project { get; private set; }
         public List<Scenario> Scenarios { get; private set; } = new List<Scenario>();
-
         public static Feature Factory(string name, Project project, string description = null)
         {
             if (project == null)

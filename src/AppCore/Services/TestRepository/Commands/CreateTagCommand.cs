@@ -1,33 +1,30 @@
-﻿using AppCore.Common.Exceptions;
+﻿using AppCore.Domain.Entities.TestRepository;
 using AppCore.Common.Interfaces;
-using AppCore.Domain.Entities.Common.Guards;
-using AppCore.Domain.Entities.TestRepository;
 using AppCore.Services.Common.Models;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
+using Microsoft.EntityFrameworkCore;
+using AppCore.Domain.Entities.Common.Guards;
+using AppCore.Common.Exceptions;
 
 namespace AppCore.Services.TestRepository.Commands
 {
-    public class CreateFeatureCommand : IRequest<CreatedItemDto>
+    public class CreateTagCommand : IRequest<CreatedItemDto>
     {
         public string Name { get; }
+        public string Description { get; }
         public Guid ProjectId { get; }
-        public string Description { get; set; }
 
-        public CreateFeatureCommand(string Name, Guid ProjectId)
+        public CreateTagCommand(string Name, Guid ProjectId)
         {
             this.Name = Name;
             this.ProjectId = ProjectId;
         }
 
-        public class Handler : IRequestHandler<CreateFeatureCommand, CreatedItemDto>
+        public class Handler : IRequestHandler<CreateTagCommand, CreatedItemDto>
         {
             private readonly IAppDbContext db;
 
@@ -35,18 +32,18 @@ namespace AppCore.Services.TestRepository.Commands
             {
                 this.db = db;
             }
-            public async Task<CreatedItemDto> Handle(CreateFeatureCommand request, CancellationToken cancellationToken)
+            public async Task<CreatedItemDto> Handle(CreateTagCommand request, CancellationToken cancellationToken)
             {
                 var projectEntity = await db.Projects
                     .FirstOrDefaultAsync(p => p.Id.Equals(request.ProjectId), cancellationToken);
 
                 EntityGuard.NullGuard(projectEntity, new EntityNotFoundException(nameof(Project), request.ProjectId));
 
-                var entity = Feature.Factory(request.Name, projectEntity);
+                var entity = Tag.Factory(request.Name, projectEntity, request.Description);
 
-                EntityGuard.NullGuard(entity, new EntityCreateFailureException(nameof(Feature), request.ProjectId, "Entity Creation failed"));
+                EntityGuard.NullGuard(entity, new EntityCreateFailureException(nameof(Tag), request.ProjectId, "Entity Creation failed"));
 
-                projectEntity.AddFeature(entity);
+                projectEntity.Tags.Add(entity);
 
                 db.Projects.Attach(projectEntity);
                 await db.SaveChangesAsync(cancellationToken);
@@ -55,15 +52,19 @@ namespace AppCore.Services.TestRepository.Commands
             }
         }
 
-        public class CreateFeatureCommandValidator : AbstractValidator<CreateFeatureCommand>
+        public class CreateTagCommandValidator : AbstractValidator<CreateTagCommand>
         {
-            public CreateFeatureCommandValidator()
+            public CreateTagCommandValidator()
             {
                 RuleFor(v => v.Name)
                     .MaximumLength(50)
                     .NotEmpty()
                     .WithMessage("Project name is required.")
                     .WithMessage("Project name already exists.");
+
+                RuleFor(v => v.ProjectId)
+                    .NotNull()
+                    .NotEmpty();
             }
         }
     }

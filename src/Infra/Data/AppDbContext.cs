@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AppCore.Domain.Entities.TestExecution;
 
 namespace Infra.Data
 {
@@ -20,6 +21,8 @@ namespace Infra.Data
         public DbSet<Scenario> Scenarios { get; set; }
         public DbSet<Feature> Features { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<TestSuite> TestSuites { get; set; }
+        public DbSet<ResultSnapshot> ResultSnapshots { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

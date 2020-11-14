@@ -40,7 +40,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult<Guid>> NewFeature(CreateFeatureCommand createFeatureCommand)
         {
             var vm = await mediator.Send(createFeatureCommand);
-            if (vm.Id != null)
+            if (vm.Id != Guid.Empty)
             {
                 var link = Url.Link(nameof(GetProjectFeature), new { featureId = vm.Id });
                 return Created(link, vm);

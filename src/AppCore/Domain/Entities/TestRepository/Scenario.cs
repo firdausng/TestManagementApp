@@ -32,7 +32,6 @@ namespace AppCore.Domain.Entities.TestRepository
         public Feature Feature { get; set; }
         public string Description { get; private set; }
         public List<Step> StepsList { get; private set; } = new List<Step>();
-
         public void UpdateInfo(string description)
         {
             if (string.IsNullOrEmpty(description))

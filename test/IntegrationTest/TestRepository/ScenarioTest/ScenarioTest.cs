@@ -105,7 +105,7 @@ namespace IntegrationTest.TestRepository.ScenarioTest
             var getScenarioDto = await SendAsync(getScenarioCommand);
 
             getScenarioDto.ShouldNotBeNull();
-            getScenarioDto.StepList.ShouldBeNull();
+            getScenarioDto.StepList.Count.ShouldBe(0);
             getScenarioDto.Description.ShouldBe("s1");
             getScenarioDto.ProjectId.ShouldBe(createProjectDto.Id);
 
@@ -125,6 +125,8 @@ namespace IntegrationTest.TestRepository.ScenarioTest
                 new UpdateStepsToScenarioCommand.StepDto(2, "step 2"),
                 new UpdateStepsToScenarioCommand.StepDto(3, "step 3"),
             });
+
+            await SendAsync(updateStepsToScenarioCommand);
 
             var getScenarioCommand = new GetScenarioQuery(createScenarioDto.Id, createProjectDto.Id, true);
             var getScenarioDto = await SendAsync(getScenarioCommand);
